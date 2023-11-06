@@ -7,10 +7,16 @@ az login
 az account set --subscription [your subscription id]
 ```
 
-## deploy
+## deploy VMs with ultra disks
 ```
 az deployment sub create -f 01_rg.bicep -l westeurope
-az deployment group create -f 02_main.bicep -g msft-nl-stu-jvw-fastbox-rg
+az deployment group create -f vm-ultras.bicep -g msft-nl-stu-jvw-fastbox-rg
+```
+
+## deploy VMs with premium V2 storage
+```
+az deployment sub create -f 01_rg.bicep -l westeurope
+az deployment group create -f vm-premiums.bicep -g msft-nl-stu-jvw-fastbox-rg
 ```
 
 ## cleanup

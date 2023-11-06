@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "./iops-vm"
+		},
+		{
+			"path": "./postgresql-flex"
+		}
+	],
+	"settings": {}
+}
