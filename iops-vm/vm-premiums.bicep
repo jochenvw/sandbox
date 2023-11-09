@@ -7,7 +7,6 @@ param adminPass string
 // variables
 var resourcePrefix = 'fastbox-iops-'
 
-
 resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' = {
   name: '${resourcePrefix}vnet'
   location: location
@@ -51,9 +50,12 @@ resource bastion 'Microsoft.Network/bastionHosts@2023-05-01' = {
   name: '${resourcePrefix}bastion'
   location: location
   sku: {
-    name: 'Basic'
+    name: 'Standard'
   }
   properties:{
+    disableCopyPaste: false
+    enableFileCopy: true
+
     ipConfigurations:[
       {
         name: 'bastionIpConfig'
@@ -70,8 +72,7 @@ resource bastion 'Microsoft.Network/bastionHosts@2023-05-01' = {
   }
 }
 
-
-resource ultraDisk 'Microsoft.Compute/disks@2023-04-02' = {
+resource disk 'Microsoft.Compute/disks@2023-04-02' = {
   name: '${resourcePrefix}premiumv2-disk'
   location: location
   sku:{
@@ -137,11 +138,11 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       }
       dataDisks: [
         {
-          name: ultraDisk.name
+          name: disk.name
           lun: 0
           createOption: 'Attach'
           managedDisk: {
-            id: ultraDisk.id
+            id: disk.id
           }
         }
       ]
@@ -165,7 +166,5 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
         }
       ]
     }
-
-
   }
 }
