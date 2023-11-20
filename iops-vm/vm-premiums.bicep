@@ -51,10 +51,11 @@ resource bastion 'Microsoft.Network/bastionHosts@2023-05-01' = {
   location: location
   sku: {
     name: 'Standard'
-  }
+  }  
   properties:{
     disableCopyPaste: false
-    enableFileCopy: true
+    enableFileCopy: true   
+    enableTunneling: true 
 
     ipConfigurations:[
       {

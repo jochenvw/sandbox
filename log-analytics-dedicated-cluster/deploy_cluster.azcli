@@ -1,0 +1,14 @@
+# Resource group
+az group create --location westeurope --resource-group nl-stu-jvw-la-dedicated
+
+# Cluster and workspaces
+az monitor log-analytics cluster create --resource-group "nl-stu-jvw-la-dedicated" --name "la-dedicated-cluster2" --location "westeurope" --sku-capacity "500"
+az monitor log-analytics workspace create --name 'nl-stu-jvw-la-ws1' --resource-group "nl-stu-jvw-la-dedicated"
+az monitor log-analytics workspace create --name 'nl-stu-jvw-la-ws2' --resource-group "nl-stu-jvw-la-dedicated"
+az monitor log-analytics workspace create --name 'nl-stu-jvw-la-ws3' --resource-group "nl-stu-jvw-la-dedicated"
+
+# Linking them up
+$clusterResourceId = az monitor log-analytics cluster list --resource-group "nl-stu-jvw-la-dedicated" --query "[?contains(name, 'la-dedicated-cluster')].[id]" --output tsv
+az monitor log-analytics workspace linked-service create --name cluster1 --resource-group "nl-stu-jvw-la-dedicated" --workspace-name "nl-stu-jvw-la-ws1" --write-access-resource-id $clusterResourceId
+az monitor log-analytics workspace linked-service create --name cluster2 --resource-group "nl-stu-jvw-la-dedicated" --workspace-name "nl-stu-jvw-la-ws2" --write-access-resource-id $clusterResourceId
+az monitor log-analytics workspace linked-service create --name cluster3 --resource-group "nl-stu-jvw-la-dedicated" --workspace-name "nl-stu-jvw-la-ws3" --write-access-resource-id $clusterResourceId
