@@ -73,8 +73,8 @@ resource bastion 'Microsoft.Network/bastionHosts@2023-05-01' = {
   }
 }
 
-resource disk 'Microsoft.Compute/disks@2023-04-02' = {
-  name: '${resourcePrefix}premiumv2-disk'
+resource disk1 'Microsoft.Compute/disks@2023-04-02' = {
+  name: '${resourcePrefix}premiumv2-disk1'
   location: location
   sku:{
     name: 'PremiumV2_LRS'
@@ -91,6 +91,46 @@ resource disk 'Microsoft.Compute/disks@2023-04-02' = {
     }
   }
 }
+
+resource disk2 'Microsoft.Compute/disks@2023-04-02' = {
+  name: '${resourcePrefix}premiumv2-disk2'
+  location: location
+  sku:{
+    name: 'PremiumV2_LRS'
+  }
+  zones: [
+    '1'
+  ]
+  properties:{    
+    diskSizeGB: 1024
+    diskIOPSReadWrite: 80000
+    diskMBpsReadWrite: 1200
+    creationData:{
+      createOption: 'Empty'
+    }
+  }
+}
+
+
+resource disk3 'Microsoft.Compute/disks@2023-04-02' = {
+  name: '${resourcePrefix}premiumv2-disk3'
+  location: location
+  sku:{
+    name: 'PremiumV2_LRS'
+  }
+  zones: [
+    '1'
+  ]
+  properties:{    
+    diskSizeGB: 1024
+    diskIOPSReadWrite: 80000
+    diskMBpsReadWrite: 1200
+    creationData:{
+      createOption: 'Empty'
+    }
+  }
+}
+
 
 resource nic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
   name: '${resourcePrefix}nic'
@@ -124,12 +164,11 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
     }
     storageProfile: {
       imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: '2022-datacenter-azure-edition'
+        publisher: 'microsoftsqlserver'
+        offer: 'sql2008r2sp3-ws2008r2sp1'
+        sku: 'standard'
         version: 'latest'
       }
-      diskControllerType: 'NVMe'
       osDisk: {
         createOption: 'FromImage'
         managedDisk: {
@@ -139,11 +178,28 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       }
       dataDisks: [
         {
-          name: disk.name
+          name: disk1.name
           lun: 0
+          caching: 'None'
           createOption: 'Attach'
           managedDisk: {
-            id: disk.id
+            id: disk1.id
+          }
+        }, {
+          name: disk2.name
+          lun: 1
+          caching: 'None'
+          createOption: 'Attach'
+          managedDisk: {
+            id: disk2.id
+          }
+        }, {
+          name: disk3.name
+          lun: 2
+          caching: 'None'
+          createOption: 'Attach'
+          managedDisk: {
+            id: disk3.id
           }
         }
       ]

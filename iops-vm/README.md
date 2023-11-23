@@ -15,8 +15,8 @@ az deployment group create -f vm-ultras.bicep -g msft-nl-stu-jvw-fastbox-rg
 
 ## deploy VMs with premium V2 storage
 ```
-az deployment sub create -f 01_rg.bicep -l eastus
-az deployment group create -f vm-premiums.bicep -g msft-nl-stu-jvw-fastbox-rg
+az group create -n msft-nl-stu-jvw-fastbox-rg2 -l eastus
+az deployment group create -f vm-premiums.bicep -g msft-nl-stu-jvw-fastbox-rg2
 ```
 
 ## cleanup
